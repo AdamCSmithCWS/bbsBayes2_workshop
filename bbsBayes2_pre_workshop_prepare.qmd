@@ -1,0 +1,72 @@
+---
+title: "Workshop_preparation"
+format: pdf
+editor: visual
+---
+
+## bbsBayes2 -- An updated and improved R package for customized analyses of North American Breeding Bird Survey data
+
+Instructors:
+
+Adam C. Smith (Canadian Wildlife Service, Environment and Climate Change Canada)
+
+Brandon Edwards (Carleton University)
+
+Steffi LaZerte (Brandon University)
+
+### Our goals with the workshop
+
+[bbsBayes2](https://bbsbayes.github.io/bbsBayes2) is a fully-rebuilt R package (replacing bbsBayes), for fitting the hierarchical Bayesian models used to estimate status and trends from the North American Breeding Bird Survey. This new package provides improved parameter estimation using Stan, spatially explicit models well suited to exploring spatial patterns in trends, a streamlined workflow, the ability to use custom stratifications, and advanced functions to assist with cross-validation and model comparisons. We hope you will follow along with the live coding, getting hands-on experience manipulating and visualizing output from a range of models and species. We will demonstrate the packages functions, including those that allow you to:
+
+1.  Prepare the data for modeling a given species
+
+2.  Choose from a suite of built-in hierarchical Bayesian models and access tools to help with cross-validation and model comparison
+
+3.  Estimate trends for any time period (1970--2019, 2005--2015, 1980--2000, etc.) and plot population trajectories
+
+4.  Generate heat maps of population trends
+
+5.  Estimate trends for customized regions (e.g., all of the eastern Boreal, Great Plains versus eastern populations of grassland birds)
+
+6.  Access and customize the main Stan models to change priors or add covariates (e.g., annual climate metrics or landcover).
+
+### To do before the workshop
+
+To make our time on Tuesday as efficient as possible, please ensure that you have:
+
+#### Instalations
+
+Run the installation steps at the beginning of the [Getting Started Vignette](https://bbsbayes.github.io/bbsBayes2/) It's important that you have done the following three things. 
+
+1.  installed the latest release of the package. Note: bbsBayes2 is NOT available on CRAN.
+
+```{r, eval=FALSE}
+install.packages("bbsBayes2",
+                 repos = c(bbsbayes = 'https://bbsbayes.r-universe.dev',
+                           CRAN = 'https://cloud.r-project.org'))
+```
+
+2.  Installed `cmdstanr` and confirmed that your setup is correct. See the [Getting Started Vignette](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#install-cmdstanr)
+
+3.  Downloaded the [BBS data](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#download-bbs-data)
+
+#### Fitted model files to work with during the workshop
+
+Downloaded the following zip files (from a Google Drive, links below) that include stored model output and an alternate stratification map that we'll use during the workshop. These additional files will allow you to try out the summary functions (trends, trajectories, trend maps, etc.), without having to run the models yourself (he BBS models can require hours - days to finish sampling). Once downloaded, unzip them to a directory called *output* within the working directory where you expect to do your coding during the workshop.
+
+[Fitted models for Scissor-tailed Flycatcher](https://drive.google.com/file/d/1zF8xOIn_ZuORmjNDHAu5YCJjIx4j-MHC/view?usp=drive_link)
+
+[Fitted model for Barn Swallow using First Difference spatial model](https://drive.google.com/file/d/1hlJ9rljDSGdkV4P_-k07wBSyWyKOy-hm/view?usp=sharing)
+
+[Fitted model for Barn Swallow using GAMYE spatial model](https://drive.google.com/file/d/1RNbM312_isopRN7Lb-jP1-wK4UvRKkHE/view?usp=sharing)
+
+[Alternate Stratification](https://drive.google.com/file/d/1pWPC2Eh5VBP7RIC173gazdAmtHfx4KdF/view?usp=sharing)
+
+
+### Workshop plan
+
+We will start by demonstrating some of the basic workflow for using the package, largely using examples from the package vignettes. 
+
+We will also be sure to leave time to answer questions and to try to demonstrate some of the more advanced aspects of the models and package. We'll be flexible and focus our time on aspects/issues/questions that are of interest to the group.
+
+
