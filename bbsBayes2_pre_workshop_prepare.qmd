@@ -23,11 +23,11 @@ Steffi LaZerte (Brandon University)
 
 1.  Prepare the data for modeling a given species
 
-2.  Choose from a suite of built-in hierarchical Bayesian models and access tools to help with cross-validation and model comparison
+2.  Estimate trends for any time period (1970--2019, 2005--2015, 1980--2000, etc.) and plot population trajectories
 
-3.  Estimate trends for any time period (1970--2019, 2005--2015, 1980--2000, etc.) and plot population trajectories
+3.  Generate heat maps of population trends
 
-4.  Generate heat maps of population trends
+4.  Choose from a suite of built-in hierarchical Bayesian models and access tools to help with cross-validation and model comparison
 
 5.  Estimate trends for customized regions (e.g., all of the eastern Boreal, Great Plains versus eastern populations of grassland birds)
 
@@ -37,7 +37,7 @@ Steffi LaZerte (Brandon University)
 
 To make our time on Tuesday as efficient as possible, please ensure that you have completed installing the relevant packages and downloaded the BBS data and the fitted model files.
 
-#### Instalations
+#### Installations
 
 Run the installation steps at the beginning of the [Getting Started Vignette](https://bbsbayes.github.io/bbsBayes2/) At least these three steps.
 
@@ -67,6 +67,80 @@ In addition, please download these zip files (from a Google Drive, links below) 
 
 ## Workshop plan
 
-We will start by demonstrating some of the basic workflow for using the package, largely using examples from the package vignettes.
+We will start by demonstrating some of the [basic workflow](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#workflow-overview) for using the package, largely using examples from the package vignettes.
 
-We will also be sure to leave time to answer questions and to try to demonstrate some of the more advanced aspects of the models and package. We'll be flexible and focus our time on aspects/issues/questions that are of interest to the group.
+We will cover the topics in the list above. We will also be sure to leave time to answer questions and to try to demonstrate some of the more advanced aspects of the models and package. We'll be flexible and focus our time on aspects/issues/questions that are of interest to the group.
+
+![](Flow.png){width=7in}
+
+```{r, warning=FALSE, echo = FALSE, eval=FALSE}
+library(DiagrammeR)
+flow <- grViz("digraph functions {
+
+  # a 'graph' statement
+  graph [overlap = true, fontsize = 15 compound = true, ranksep = 0.5]
+
+  # several 'node' statements
+  node [shape = rectangle, fontname = 'Courier New',
+        fixedsize = false, style=filled, fillcolor=white]
+
+  fetch [label = 'fetch_bbs_data()', fillcolor=lightblue]
+  remove [label = 'remove_cache()', fillcolor=orange]
+  loadbbs [label = 'load_bbs_data()', fillcolor=lightblue]
+
+  search [label = 'search_species()', fillcolor=orange]
+  strat [label = 'stratify()', fillcolor=lightpink]
+  prepdata [label = 'prepare_data()', fillcolor=lightpink]
+  prepspatial [label = 'prepare_spatial()', fillcolor=lightpink]
+  prepmodel [label = 'prepare_model()', fillcolor=darkolivegreen3]
+  loadmap [label = 'load_map()', fillcolor=orange]
+  assign_ps [label = 'assign_prov_state()', fillcolor=orange]
+
+  runmodel [label = 'run_model()', fillcolor=darkolivegreen3]
+  modelfile [label = 'copy_model_file()', fillcolor=darkolivegreen3]
+
+  conv[label = 'save_model_run()\nget_convergence()\nget_model_vars()\nget_summary()', fillcolor=darkolivegreen3]
+
+  genind [label = 'generate_indices()', fillcolor=thistle]
+  gentre [label = 'generate_trends()', fillcolor=thistle]
+  geo [label = 'plot_geofacet()', fillcolor=thistle]
+  plotind [label = 'plot_indices()', fillcolor=thistle]
+  genmap [label = 'plot_map()', fillcolor=thistle]
+
+
+  # several 'edge' statements
+  edge []
+  fetch->remove [style=dashed]
+  fetch->loadbbs [style=dashed]
+  fetch->strat [style=dashed]
+
+  runmodel->remove [style=dashed]
+
+  modelfile->prepmodel [style=dashed]
+
+  search->strat [style=dashed]
+  strat->prepdata
+  prepdata->prepspatial
+  prepdata->prepmodel [color=grey50]
+  prepspatial->prepmodel [color=grey50]
+  prepmodel->runmodel
+
+
+  runmodel->conv
+  runmodel->genind
+  genind->gentre
+
+  loadmap->assign_ps  [style=dashed]
+  loadmap->genind [style=dashed]
+  loadmap->prepspatial [style=dashed]
+  loadmap->strat [style=dashed]
+
+  genind->plotind
+  genind->geo
+  gentre->geo [color=grey50]
+  gentre->genmap
+
+  # Invisible edges for arranging
+  prepspatial->conv [style=invis]
+}")
+```
