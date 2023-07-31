@@ -8,7 +8,7 @@ editor: visual
 
 ## Tuesday, 8 August, 8:00--11:00 a.m. ET
 
-Instructors:
+**Instructors**:
 
 Adam C. Smith (Canadian Wildlife Service, Environment and Climate Change Canada)\
 adamcsmith.birdstats\@gmail.com
@@ -71,7 +71,7 @@ We will start by demonstrating some of the [basic workflow](https://bbsbayes.git
 
 We will cover the topics in the list above. We will also be sure to leave time to answer questions and to try to demonstrate some of the more advanced aspects of the models and package. We'll be flexible and focus our time on aspects/issues/questions that are of interest to the group.
 
-![](Flow.png){width=7in}
+![Relationships among functions in the bbsBayes2 package](Flow.png){width="7in"}
 
 ```{r, warning=FALSE, echo = FALSE, eval=FALSE}
 library(DiagrammeR)
