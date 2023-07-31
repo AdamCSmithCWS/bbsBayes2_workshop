@@ -38,27 +38,24 @@ We will demonstrate the packages functions, including those that allow you to:
 
 ## To do before the workshop
 
-To make our time on Tuesday as efficient as possible, please ensure that you have completed installing the relevant packages and downloaded the BBS data and the fitted model files.
+To make our time on Tuesday as efficient as possible, please ensure that you have completed
+to following steps prior to the workshop.
 
-#### Installations
+#### 1. Install software and download BBS data
 
-Run the installation steps at the beginning of the [Getting Started Vignette](https://bbsbayes.github.io/bbsBayes2/) At least these three steps.
+Run the installation steps at the beginning of the [Getting Started Vignette](https://bbsbayes.github.io/bbsBayes2/) including:
 
-1.  Install the latest release of the package. Note: bbsBayes2 is NOT available on CRAN.
+1.  Install the latest release of bbsBayes2 (please update if you have already installed it)
 
-```{r, eval=FALSE}
-install.packages("bbsBayes2",
-                 repos = c(bbsbayes = 'https://bbsbayes.r-universe.dev',
-                           CRAN = 'https://cloud.r-project.org'))
-```
+2.  Install cmdstanr and confirmed that your setup is correct.
 
-2.  Install `cmdstanr` and confirmed that your setup is correct. See the [Getting Started Vignette](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#install-cmdstanr)
+3.  Download the BBS data.
 
-3.  Download the [BBS data](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#download-bbs-data)
+**Contact [Adam](mailto:adamcsmith.birdstats@gmail.com) if you run into problems with these installations** 
 
-#### Fitted model files to work with during the workshop
+#### 2. Download fitted model files
 
-In addition, please download these zip files (from a Google Drive, links below) that include stored model output and an alternate stratification map that we'll use during the workshop. These additional files will allow us to try out the summary functions (trends, trajectories, trend maps, etc.), without having to run the models yourself (he BBS models can require hours - days to finish sampling). Once downloaded, unzip them to a directory called *output* within the working directory where you expect to do your coding during the workshop.
+In addition, please download these zip files (from a Google Drive, links below) that include stored model output and an alternate stratification map that we'll use during the workshop. These additional files will allow us to try out the summary functions (trends, trajectories, trend maps, etc.), without having to run the models yourself (BBS models can require hours or even days to finish sampling). Once downloaded, unzip them to a directory called *`output`* within the working directory where you expect to do your coding during the workshop.
 
 [Fitted models for Scissor-tailed Flycatcher](https://drive.google.com/file/d/1zF8xOIn_ZuORmjNDHAu5YCJjIx4j-MHC/view?usp=drive_link)
 
