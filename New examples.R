@@ -44,20 +44,20 @@ p <- prepare_data(s, min_n_routes = 1)
 map<-load_map(stratify_by = "latlong")
 sp<-prepare_spatial(p,map)
 
-m_hier <- prepare_model(p,"gamye",
+m_gamye <- prepare_model(sp,"gamye",
                         calculate_cv = TRUE)
 
-m_spat <- prepare_model(ps,"gamye",
+m_first_diff <- prepare_model(sp,"first_diff",
                         calculate_cv = TRUE)
 
 for(k in 1:10){
-  m_tmp <- run_model(m_hier,
+  m_tmp <- run_model(m_gamye,
                      refresh = 500,
                      k = k)
   save_model_run(m_tmp,
-                 path = paste0("output/m_hier_",k,"_rds"))
+                 path = paste0("output/m_gamye_",k,"_.rds"))
 
-
+  sum_cv <- get_summary(m_tmp,variables = "log_lik_cv")
 
 
 }
