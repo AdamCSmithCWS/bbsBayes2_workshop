@@ -19,7 +19,10 @@ Steffi LaZerte (steffilazerte.ca; Brandon University)
 
 ### About the workshop
 
-[bbsBayes2](https://bbsbayes.github.io/bbsBayes2) is a fully-rebuilt R package (replacing bbsBayes), for fitting the hierarchical Bayesian models used to estimate status and trends from the North American Breeding Bird Survey. This new package provides improved parameter estimation using Stan, spatially explicit models well suited to exploring spatial patterns in trends, a streamlined workflow, the ability to use custom stratifications, and advanced functions to assist with cross-validation and model comparisons. We hope you will follow along with the live coding, getting hands-on experience manipulating and visualizing output from a range of models and species. We will demonstrate the packages functions, including those that allow you to:
+[bbsBayes2](https://bbsbayes.github.io/bbsBayes2) is a fully-rebuilt R package (replacing bbsBayes), for fitting the hierarchical Bayesian models used to estimate status and trends from the North American Breeding Bird Survey. This new package provides improved parameter estimation using Stan, spatially explicit models well suited to exploring spatial patterns in trends, a streamlined workflow, the ability to use custom stratifications, and advanced functions to assist with cross-validation and model comparisons. 
+
+During this workshop you will follow along with live coding to get a hands-on experience manipulating and visualizing output from a range of models and species. 
+We will demonstrate the packages functions, including those that allow you to:
 
 1.  Prepare the data for modeling a given species
 
