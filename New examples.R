@@ -39,6 +39,8 @@ loo_first_diff <- m_first_diff$model_fit$loo()
 
 # Cross-validation
 
+library(tidyverse)
+
 s <- stratify("latlong","Baird's Sparrow")
 p <- prepare_data(s, min_n_routes = 1)
 map<-load_map(stratify_by = "latlong")
@@ -54,7 +56,7 @@ mod_sel <- "gamye"
 
 m_sel <- prepare_model(sp,mod_sel,
                           calculate_cv = TRUE)
-for(k in 1:10){
+for(k in 2:10){
 
   m_tmp <- run_model(m_sel,
                      refresh = 500,
