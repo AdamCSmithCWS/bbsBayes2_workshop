@@ -10,8 +10,8 @@ editor: visual
 
 **Instructors**:
 
-Adam C. Smith (Canadian Wildlife Service, Environment and Climate Change Canada)\
-adamcsmith.birdstats\@gmail.com
+Adam C. Smith (Canadian Wildlife Service, Environment and Climate Change Canada) 
+[adamcsmith.birdstats@gmail.com](mailto:adamcsmith.birdstats@gmail.com)
 
 Brandon Edwards (Carleton University)
 
@@ -22,7 +22,7 @@ Steffi LaZerte (steffilazerte.ca; Brandon University)
 [bbsBayes2](https://bbsbayes.github.io/bbsBayes2) is a fully-rebuilt R package (replacing bbsBayes), for fitting the hierarchical Bayesian models used to estimate status and trends from the North American Breeding Bird Survey. This new package provides improved parameter estimation using Stan, spatially explicit models well suited to exploring spatial patterns in trends, a streamlined workflow, the ability to use custom stratifications, and advanced functions to assist with cross-validation and model comparisons. 
 
 During this workshop you will follow along with live coding to get a hands-on experience manipulating and visualizing output from a range of models and species. 
-We will demonstrate the packages functions, including those that allow you to:
+We will demonstrate the package's functions, including those that allow you to:
 
 1.  Prepare the data for modeling a given species
 
