@@ -50,15 +50,26 @@ m_gamye <- prepare_model(sp,"gamye",
 m_first_diff <- prepare_model(sp,"first_diff",
                         calculate_cv = TRUE)
 
+mod_sel <- "gamye"
+
+m_sel <- prepare_model(sp,mod_sel,
+                          calculate_cv = TRUE)
 for(k in 1:10){
-  m_tmp <- run_model(m_gamye,
+
+  m_tmp <- run_model(m_sel,
                      refresh = 500,
                      k = k)
   save_model_run(m_tmp,
-                 path = paste0("output/m_gamye_",k,"_.rds"))
+                 path = paste0("output/m_",mod_sel,"_",k,"_.rds"))
 
   sum_cv <- get_summary(m_tmp,variables = "log_lik_cv")
 
+  sum_cv <- sum_cv %>%
+    mutate(original_count_index = m_tmp$model_data$test)
+
+  saveRDS(sum_cv,paste0("output/cv_sum_",mod_sel,"_",k,".rds"))
+
+  print(paste(mod_sel,k))
 
 }
 # fit a model with the calc_loo = TRUE
