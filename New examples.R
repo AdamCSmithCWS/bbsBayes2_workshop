@@ -1,4 +1,6 @@
 
+setwd("C:/Users/SmithAC/Documents/GitHub/bbsBayes2_workshop")
+
 library(bbsBayes2)
 # latlong example ---------------------------------------------------------
 
