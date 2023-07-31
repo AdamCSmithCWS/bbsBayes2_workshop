@@ -8,18 +8,21 @@ editor: visual
 
 ## Tuesday, 8 August, 8:00--11:00 a.m. ET
 
-Instructors:
+**Instructors**:
 
 Adam C. Smith (Canadian Wildlife Service, Environment and Climate Change Canada)\
 adamcsmith.birdstats\@gmail.com
 
 Brandon Edwards (Carleton University)
 
-Steffi LaZerte (Brandon University)
+Steffi LaZerte (steffilazerte.ca; Brandon University)
 
 ### About the workshop
 
-[bbsBayes2](https://bbsbayes.github.io/bbsBayes2) is a fully-rebuilt R package (replacing bbsBayes), for fitting the hierarchical Bayesian models used to estimate status and trends from the North American Breeding Bird Survey. This new package provides improved parameter estimation using Stan, spatially explicit models well suited to exploring spatial patterns in trends, a streamlined workflow, the ability to use custom stratifications, and advanced functions to assist with cross-validation and model comparisons. We hope you will follow along with the live coding, getting hands-on experience manipulating and visualizing output from a range of models and species. We will demonstrate the packages functions, including those that allow you to:
+[bbsBayes2](https://bbsbayes.github.io/bbsBayes2) is a fully-rebuilt R package (replacing bbsBayes), for fitting the hierarchical Bayesian models used to estimate status and trends from the North American Breeding Bird Survey. This new package provides improved parameter estimation using Stan, spatially explicit models well suited to exploring spatial patterns in trends, a streamlined workflow, the ability to use custom stratifications, and advanced functions to assist with cross-validation and model comparisons. 
+
+During this workshop you will follow along with live coding to get a hands-on experience manipulating and visualizing output from a range of models and species. 
+We will demonstrate the packages functions, including those that allow you to:
 
 1.  Prepare the data for modeling a given species
 
@@ -35,27 +38,24 @@ Steffi LaZerte (Brandon University)
 
 ## To do before the workshop
 
-To make our time on Tuesday as efficient as possible, please ensure that you have completed installing the relevant packages and downloaded the BBS data and the fitted model files.
+To make our time on Tuesday as efficient as possible, please ensure that you have completed
+to following steps prior to the workshop.
 
-#### Installations
+#### 1. Install software and download BBS data
 
-Run the installation steps at the beginning of the [Getting Started Vignette](https://bbsbayes.github.io/bbsBayes2/) At least these three steps.
+Run the installation steps at the beginning of the [Getting Started Vignette](https://bbsbayes.github.io/bbsBayes2/) including:
 
-1.  Install the latest release of the package. Note: bbsBayes2 is NOT available on CRAN.
+1.  Install the latest release of bbsBayes2 (please update if you have already installed it)
 
-```{r, eval=FALSE}
-install.packages("bbsBayes2",
-                 repos = c(bbsbayes = 'https://bbsbayes.r-universe.dev',
-                           CRAN = 'https://cloud.r-project.org'))
-```
+2.  Install cmdstanr and confirmed that your setup is correct.
 
-2.  Install `cmdstanr` and confirmed that your setup is correct. See the [Getting Started Vignette](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#install-cmdstanr)
+3.  Download the BBS data.
 
-3.  Download the [BBS data](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#download-bbs-data)
+**Contact [Adam](mailto:adamcsmith.birdstats@gmail.com) if you run into problems with these installations** 
 
-#### Fitted model files to work with during the workshop
+#### 2. Download fitted model files
 
-In addition, please download these zip files (from a Google Drive, links below) that include stored model output and an alternate stratification map that we'll use during the workshop. These additional files will allow us to try out the summary functions (trends, trajectories, trend maps, etc.), without having to run the models yourself (he BBS models can require hours - days to finish sampling). Once downloaded, unzip them to a directory called *output* within the working directory where you expect to do your coding during the workshop.
+In addition, please download these zip files (from a Google Drive, links below) that include stored model output and an alternate stratification map that we'll use during the workshop. These additional files will allow us to try out the summary functions (trends, trajectories, trend maps, etc.), without having to run the models yourself (BBS models can require hours or even days to finish sampling). Once downloaded, unzip them to a directory called *`output`* within the working directory where you expect to do your coding during the workshop.
 
 [Fitted models for Scissor-tailed Flycatcher](https://drive.google.com/file/d/1zF8xOIn_ZuORmjNDHAu5YCJjIx4j-MHC/view?usp=drive_link)
 
@@ -71,7 +71,7 @@ We will start by demonstrating some of the [basic workflow](https://bbsbayes.git
 
 We will cover the topics in the list above. We will also be sure to leave time to answer questions and to try to demonstrate some of the more advanced aspects of the models and package. We'll be flexible and focus our time on aspects/issues/questions that are of interest to the group.
 
-![](Flow.png){width=7in}
+![Relationships among functions in the bbsBayes2 package](Flow.png){width="7in"}
 
 ```{r, warning=FALSE, echo = FALSE, eval=FALSE}
 library(DiagrammeR)
