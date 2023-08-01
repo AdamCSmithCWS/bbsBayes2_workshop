@@ -47,7 +47,7 @@ Run the installation steps at the beginning of the [Getting Started Vignette](ht
 
 1.  Install the latest release of bbsBayes2 (please update if you have already installed it)
 
-2.  Install cmdstanr and confirmed that your setup is correct.
+2.  Install cmdstanr and confirm that your setup is correct.
 
 3.  Download the BBS data.
 
