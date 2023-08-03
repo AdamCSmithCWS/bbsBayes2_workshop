@@ -56,13 +56,13 @@ mod_sel <- "gamye"
 
 m_sel <- prepare_model(sp,mod_sel,
                           calculate_cv = TRUE)
-for(k in 2:10){
+for(k in 1:10){
 
   m_tmp <- run_model(m_sel,
                      refresh = 500,
-                     k = k)
-  save_model_run(m_tmp,
-                 path = paste0("output/m_",mod_sel,"_",k,"_.rds"))
+                     k = k,
+                     output_dir = "output",
+                     output_basename = paste0("m_",mod_sel,"_",k,"_.rds"))
 
   sum_cv <- get_summary(m_tmp,variables = "log_lik_cv")
 
@@ -74,6 +74,67 @@ for(k in 2:10){
   print(paste(mod_sel,k))
 
 }
+
+orig_data <- m_gamye$raw_data %>%
+  mutate(folds = m_gamye$folds,
+         original_count_index = row_number())
+sum_cv <- NULL
+wide_cv <- orig_data %>%
+  select(original_count_index)
+for(mod_sel in c("gamye","first_diff")){
+  wide_cvt <- NULL
+for(k in 1:10){
+
+  tmp <- readRDS(paste0("output/cv_sum_",mod_sel,"_",k,".rds")) %>%
+    mutate(model = mod_sel)
+  sum_cv <- bind_rows(sum_cv,tmp)
+  tmp <- tmp %>%
+    select(original_count_index,mean) %>%
+    rename_with(., ~gsub("mean",paste0("log_lik_",mod_sel),.x))
+  wide_cvt <- bind_rows(wide_cvt,tmp)
+
+}
+  wide_cv <- left_join(wide_cv,wide_cvt,
+                       by = "original_count_index")
+}
+
+sum_cv <- sum_cv %>%
+  inner_join(.,orig_data,
+            by = "original_count_index")
+
+saveRDS(sum_cv, "output/sum_cv.rds")
+cv_comp <- sum_cv %>%
+  drop_na() %>%
+  group_by(model) %>%
+  summarise(sum_log_lik = sum(mean),
+            mean_log_lik = mean(mean),
+            se_log_lik = sd(mean)/sqrt(n()))
+
+cv_dif <- wide_cv  %>%
+  inner_join(.,orig_data,
+             by = "original_count_index") %>%
+  drop_na() %>% #dropping the single points that were never in the testing dataset
+  mutate(diff = log_lik_first_diff - log_lik_gamye)
+
+saveRDS(cv_dif,"output/cv_dif.rds")
+cv_dif_sum <- cv_dif %>%
+  summarise(mean_diff = mean(diff),
+            se_diff = sd(diff)/sqrt(n()),
+            z = mean_diff/se_diff)
+cv_dif_sum
+
+# explore the differences by count value
+dif_by_count <- ggplot(cv_dif) +
+  geom_point(aes(x = count+1,y = diff,
+                 colour = year),
+             alpha = 0.3)+
+  scale_colour_viridis_c()+
+  #scale_x_continuous(trans = "log10")+
+  geom_hline(yintercept = 0)+
+  theme_bw()
+
+dif_by_count
+
 # fit a model with the calc_loo = TRUE
 
 
