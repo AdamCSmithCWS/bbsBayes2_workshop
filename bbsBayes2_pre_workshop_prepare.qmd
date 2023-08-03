@@ -13,6 +13,7 @@ editor: visual
 
 Adam C. Smith (Canadian Wildlife Service, Environment and Climate Change Canada) 
 [adamcsmith.birdstats@gmail.com](mailto:adamcsmith.birdstats@gmail.com)
+Adam C. Smith on [conference Slack channel](https://aos-scosoc2023.slack.com)
 
 Brandon Edwards (Carleton University)
 
@@ -27,7 +28,7 @@ We will demonstrate the package's functions, including those that allow you to:
 
 1.  Prepare the data for modeling a given species
 
-2.  Estimate trends for any time period (1970--2019, 2005--2015, 1980--2000, etc.) and plot population trajectories
+2.  Estimate trends for any time period (1970-2019, 2005-2015, 1980-2000, etc.) and plot population trajectories
 
 3.  Generate heat maps of population trends
 
@@ -145,3 +146,8 @@ flow <- grViz("digraph functions {
   prepspatial->conv [style=invis]
 }")
 ```
+
+
+### If you are new to R
+The content of this workshop assumes that everyone is familiar with working R. So if you are new to R, you can expect a rather steep learning curve. But if you're game, then we are too.
+Before you run the package installation steps above. Install both R and RStudio, following the friendly directions [here](https://rstudio-education.github.io/hopr/starting.html).
