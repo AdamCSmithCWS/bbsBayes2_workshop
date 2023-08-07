@@ -6,4 +6,6 @@
 *.csv
 nul
 /output
+/private
+
 
