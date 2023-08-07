@@ -103,13 +103,6 @@ sum_cv <- sum_cv %>%
             by = "original_count_index")
 
 saveRDS(sum_cv, "output/sum_cv.rds")
-cv_comp <- sum_cv %>%
-  drop_na() %>%
-  group_by(model) %>%
-  summarise(sum_log_lik = sum(mean),
-            mean_log_lik = mean(mean),
-            se_log_lik = sd(mean)/sqrt(n()))
-
 cv_dif <- wide_cv  %>%
   inner_join(.,orig_data,
              by = "original_count_index") %>%
@@ -117,6 +110,19 @@ cv_dif <- wide_cv  %>%
   mutate(diff = log_lik_first_diff - log_lik_gamye)
 
 saveRDS(cv_dif,"output/cv_dif.rds")
+
+#saveRDS(wide_cv, "output/wide_cv.rds")
+
+cv_comp <- sum_cv %>%
+  drop_na() %>%
+  group_by(model) %>%
+  summarise(sum_log_lik = sum(mean),
+            mean_log_lik = mean(mean),
+            se_log_lik = sd(mean)/sqrt(n()))
+
+cv_comp
+
+
 cv_dif_sum <- cv_dif %>%
   summarise(mean_diff = mean(diff),
             se_diff = sd(diff)/sqrt(n()),

@@ -1,0 +1,398 @@
+---
+title: "Stratification"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Stratification}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  # For pre-compiling and pkgdown (relative to pkg home)
+  fig.path = "vignettes/articles/figures/stratification_",
+  dpi = 150
+)
+
+```
+
+```{r setup, message = FALSE}
+library(bbsBayes2)
+library(sf)       # Spatial data manipulations
+library(dplyr)    # General data manipulations
+library(ggplot2)  # Plotting
+library(patchwork) # mutli-plot
+```
+
+In this vignette we'll explore the various ways you can stratify the BBS data in
+preparation for running the models.
+
+You can use existing, pre-defined stratifications, subset an existing stratification (e.g., clip the data to your area of interest), or load
+your own custom stratification, either using a completely new set of spatial
+data, or by modifying the spatial polygons of an existing strata.
+
+This vignette assumes that the BBS data have already been downloaded and that you are familiar with the [basics of the bbsBayes2 workflow](./bbsBayes2.html)
+
+
+## Stratifying with built-in stratifications
+
+The built-in stratifications are
+`r paste0(names(bbs_strata), collapse = ", ")`.
+
+- `bbs_cws` -- Intersections of Political regions X Bird Conservation Regions
+  (Stratification used by the Canadian Wildlife Service [CWS] for national status reporting)
+- `bbs_usgs` -- Intersections of Political regions X Bird Conservation Regions
+  (Stratification used by the United Status Geological Survey [USGS] for national status reporting)
+- `bcr` -- Bird Conservation Regions only
+- `prov_state` -- Political regions only - states, provinces, and territories
+- `latlong` -- Grid-cells of 1 degree of latitude X 1 degree of longitude, aka "degree-blocks". These are the original survey design strata for the BBS. Routes are established at randomized locations within these degree-blocks.
+
+You can visualize these stratifications by looking at the maps
+included in bbsBayes2 with `load_map()`.
+
+```{r, fig.cap="", fig.alt= "Map of the BBS USGS stratification showing the regions that represent spatial intersections of Bird Conservation Regions with political jurisdictions (Provinces, Territories, States)", fig.width = 8, fig.asp = 0.8}
+ggplot(data = load_map("bbs_usgs"), aes(fill = strata_name)) +
+  geom_sf() +
+  scale_fill_viridis_d(guide = "none")
+```
+
+To stratify BBS data, you can use these existing stratifications by
+specifying `by = "name"` in the `stratify()` function.
+
+```{r}
+s <- stratify(by = "bbs_usgs", species = "Canada Jay")
+```
+
+### The latlong stratification - special note
+
+The latlong stratification `by = "latlong"` is the finest-scale stratification built into the package, and so it divides the BBS data into many more strata-units than other stratifications.  Therefore, you may wish to adjust the minimum data inclusion criteria when preparing the data. Specifically, setting `min_n_routes = 1` ensures that every grid-cell with at least one BBS route can be included. There are many degree-blocks that have only one route, as this is the original sampling design goal of the BBS (at least one route within each degree-block).
+
+```{r}
+s <- stratify(by = "latlong", species = "Canada Jay")
+p <- prepare_data(s, min_n_routes = 1)
+
+```
+
+## Custom stratifications
+
+bbsBayes2 can stratify the BBS data using any polygon map as input.
+
+### Load a custom stratification map
+
+To define a completely different stratification, you'll need to provide a
+spatial data object with polygons defining your strata.
+
+In our example we'll use WBPHS stratum boundaries for 2019.
+This is available from available from the US Fish and Wildlife Service Catalogue: <https://ecos.fws.gov/ServCat/Reference/Profile/142628>
+
+You can either download it by hand, or with the following code.
+```{r, eval=FALSE}
+z <- "output/WBPHS_Stratum_Boundaries_2019.zip" #
+
+download.file(url = "https://ecos.fws.gov/ServCat/DownloadFile/213149",
+              destfile = z,
+              cacheOK = FALSE)
+unzip(z)  # Unzip - if you get a file is corrupt message, download it manually
+unlink(z) # Remove the zipped file
+```
+The zip file is also available in this [Google Drive](https://drive.google.com/file/d/1pWPC2Eh5VBP7RIC173gazdAmtHfx4KdF/view?usp=sharing)
+
+To use this file in bbsBayes2, we need to load it as an sf object using the sf
+package.
+```{r, fig.cap="", fig.alt= "Map of the strata used in the Waterfowl Breeding Population and Habitat Surveys", fig.width = 8, fig.asp = 0.8}
+map <- sf::read_sf("output/WBPHS_stratum_boundaries_2019.shp")
+ggplot(map, aes(fill = factor(STRAT))) +
+  geom_sf() +
+  scale_fill_viridis_d(guide = "none")
+
+```
+### Identify the strata names
+
+We see that it has one column that reflects the stratum names. First we'll
+rename this column to `strata_name`, so that the `stratify()` function knows what attribute includes the names that define each stratum.
+
+```{r}
+map <- rename(map, strata_name = STRAT)
+```
+
+### Stratify the data
+
+Now we have the spatial data and relevant information to pass to `stratify()`.
+
+When using a custom stratification, the `by` argument is just a user-defined arbitrary name to document which stratification was used. This name gets passed into the meta data of the following steps and the final fitted model. Let's use something informative, but short (although there's no limit).
+We also need to give the function our map.
+
+```{r}
+s <- stratify(by = "WBPHS_2019", species = "Canada Jay", strata_custom = map)
+```
+
+> Note that strata names are automatically put into lower case for consistency.
+
+We can take a quick look at the output, by looking at the meta data and routes
+contained therein.
+```{r}
+s[["meta_data"]]
+
+s[["routes_strata"]]
+```
+### Visualise the new strata and data
+
+To get a different look we can also plot this data on top of our map using
+ggplot2. Note that we use `factor()` to ensure the strata names are
+categorical.
+
+```{r, fig.cap="", fig.alt= "map showing the strata in our custom stratification", fig.width = 8, fig.asp = 0.8}
+rts <- s[["routes_strata"]] %>%
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+
+ggplot() +
+  geom_sf(data = map, aes(fill = factor(strata_name)), alpha = 0.3) +
+  geom_sf(data = rts, aes(colour = factor(strata_name)), size = 1) +
+  scale_fill_viridis_d(aesthetics = c("colour", "fill"), guide = "none")
+```
+### Omitted BBS routes
+
+Based on the message we received during stratification (`Omitting...`) and this
+map, it looks as if our custom stratification is excluding some BBS data (i.e., routes with starting locations that are not overlapped by the strata map). This makes sense because the WBPHS survey area is much smaller than the region covered by the BBS. However, let's confirm that the excluded routes are the ones we expect.
+
+We can re-run the stratification with `return_omitted = TRUE` which will attach
+a data frame of omitted strata to the output.
+```{r}
+s <- stratify(by = "WBPHS_2019", species = "Canada Jay", strata_custom = map,
+              return_omitted = TRUE)
+s[["routes_omitted"]]
+```
+
+Let's take a look.
+
+```{r, fig.cap="", fig.alt= "map showing BBS route starting locations that are inside and outside of the custom stratification", fig.width = 8, fig.asp = 0.8}
+omitted <- st_as_sf(s[["routes_omitted"]], coords = c("longitude", "latitude"),
+                    crs= 4326)
+
+ggplot() +
+  geom_sf(data = map, aes(fill = factor(strata_name)), alpha = 0.3) +
+  geom_sf(data = rts, aes(colour = factor(strata_name)), size = 1, alpha = 0.5) +
+  geom_sf(data = omitted, size = 0.75, alpha = 0.5) +
+  scale_fill_viridis_d(aesthetics = c("colour", "fill"), guide = "none")
+```
+
+
+The map shows that most of the omitted routes are routes that are clearly outside of our desired stratification. However, it also shows that there are some BBS route start-points that are just outside of the strata (e.g., some routes in Nova Scotia and Alaska). The user can decide what to do with these sorts of minor overlap issues. For example, buffering the original stratification map might make sense in some situations. For now, we will trust our custom strata map and retain only the BBS routes with start locations inside our strata polygons.
+
+
+## Fitting the model
+
+To fit the model, we follow the standard workflow using our stratified data.
+
+```{r}
+p <- prepare_data(s,
+                  min_year = 2000,
+                  max_year = 2021) #subset a shorter time-span to speed model-fit
+mp <- prepare_model(p,model = "slope",
+                   model_variant = "hier")
+```
+
+```{r, eval=FALSE}
+m <- run_model(mp,
+               iter_warmup = 500,
+               iter_sampling = 100)
+```
+
+```{r,echo=FALSE}
+m <- readRDS("output/BBS_STAN_slope_hier_2023-07-05.rds")
+```
+### Predictions from the model using the custom stratification
+
+Now we can start to look at the indices and trends related to our model.
+
+We can apply the `generate_indices()` and `generate_trends()` functions to the output from our model, the same as we would with the built-in stratifications.
+
+```{r}
+i <- generate_indices(m)
+
+t <- generate_trends(i)
+```
+And with one additional argument, we can also use the `plot_map()` function.
+
+```{r, fig.cap="", fig.alt= "", fig.width = 8, fig.asp = 0.8}
+trend_map <- plot_map(t, strata_custom = map)
+trend_map
+```
+
+## Generating state and province predictions from a custom stratification
+
+A useful feature of the hierarchical Bayesian models for the BBS is the ability to generate formal estimates of indices (annual relative abundance) and trends (rates of population change) for any composite region. *Formal estimates* meaning we can estimate the full posterior distribution, including a point estimate and its associated uncertainty (credible limits). These composite regions can be defined based on any combination of the underlying strata used to fit the model. For example, using any custom stratification, we can generate estimates for political jurisdictions (countries, states, provinces), as long as we can comfortably designate each of the strata to one of these jurisdictions.
+
+By default, `generate_indices()` creates indices at two levels "continent" (the combination of all strata used in the analysis) and "stratum" (estimates for individual strata). For the two *bbs* stratifications ("bbs_usgs" and "bbs_cws"), we can also add "prov_state", "bcr",
+"bcr_by_country" (where appropriate). For any custom stratification, we can also add the political jurisdictions and/or create our own regional divisions and provide them as a `regions_index` data frame.
+
+For example, let's imagine we would like to calculate regional indices for
+each stratum, country, province/state, as well as for a custom division of
+eastern and western regions.
+
+First we'll need to tell the function which strata belong to which province or
+state, and then which belong to the 'east' and which to the 'west.
+
+We'll start by using a helper function `assign_prov_state()`. This function
+takes a map of strata and assigns each strata to a province or state
+depending on the amount of overlap. By default it will warn if the amount of
+overlap is less than 75%, but in this case, we will lower that cutoff to 60%.
+The plot gives us a chance to make a quick assessment of whether we're happy
+with how the various strata have been assigned.
+
+```{r, fig.cap="", fig.alt= "", fig.width = 8, fig.asp = 0.8}
+rindex <- assign_prov_state(map, min_overlap = 0.6, plot = TRUE)
+```
+
+Next we'll define the east/west divide by hand. If we plot the strata by
+name, we can pick out which are eastern and which western.
+
+```{r, fig.cap="", fig.alt= "", fig.width = 8, fig.asp = 0.8}
+
+ggplot(rindex) +
+  geom_sf(data = load_map(type = "North America")) +
+  geom_sf() +
+  geom_sf_text(aes(label = strata_name))
+```
+
+The western and eastern strata seem to be split numerically, such that the western strata have numbers lower than 50 or greater than 74, eastern strata have numbers in between. So we'll add a column to the `rindex` dataframe with "east" and "west" character names to group the strata.
+
+```{r}
+rindex <- mutate(
+  rindex,
+  east_west = if_else(as.numeric(strata_name) < 50 | as.numeric(strata_name) > 74,
+                      "west",
+                      "east"))
+```
+
+And now double check that we correctly grouped the strata!
+
+```{r, fig.cap="", fig.alt= "", fig.width = 8, fig.asp = 0.8}
+ggplot(data = rindex) +
+  geom_sf(data = load_map(type = "North America")) +
+  geom_sf(data = rindex, aes(fill = east_west), alpha = 0.5)
+
+```
+
+Then supply the `rindex` object to the `regions_index` argument of the `generate_indices()` function and include the relevant column names from the object as `regions`.
+```{r}
+i <- generate_indices(
+  m,
+  regions = c("stratum", "country", "prov_state", "east_west"),
+  regions_index = rindex)
+
+t <- generate_trends(i)
+
+```
+
+We can plot the population trajectories for each of these regions with `plot_indices()`.
+
+```{r, fig.cap="", fig.alt= "", fig.width = 8, fig.asp = 0.8}
+
+p <- plot_indices(i)
+names(p)
+
+p[["east"]] + p[["west"]]
+```
+
+Finally we can even create geofaceted plots (which is only possible in our case
+because we assigned our strata to Provinces and States and calculated indices
+for these regions). These geofacet plots can be useful for visualizing the population trajectories of species with broad ranges across many states and provinces.
+```{r, fig.cap="", fig.alt= "", fig.width = 8, fig.asp = 0.8}
+plot_geofacet(i, trends = t, multiple = TRUE)
+```
+
+
+## Subsetting an existing stratification
+
+In general, it is often useful to use all of the data for a given species, even if you're only interested in trends for a portion of the species' range (estimates of observer effects are informed by all of the data in the analysis). However, there may be situations where the focus of your study is limited to a particular region. For example what if you want to use one of the standard stratifications, but you only want the analysis to be influenced by data from one region, say only Canadian data?
+
+In this case you can subset the BBS CWS stratification to only Canadian regions, and use that subset of regions as a custom stratification in the `stratify()` function.
+
+In addition to maps, stratifications are available as data frames in the
+`bbs_strata` object.
+
+```{r}
+names(bbs_strata)
+head(bbs_strata[["bbs_cws"]])
+```
+
+We can now modify and use this data frame as we like.
+```{r}
+my_cws <- filter(bbs_strata[["bbs_cws"]], country == "Canada")
+s <- stratify(by = "bbs_cws", species = "Canada Jay", strata_custom = my_cws)
+```
+
+Note that the stratification is now "bbs_cws" and "subset"
+
+```{r}
+s[["meta_data"]]
+```
+
+We can see the strata included by looking at the `meta_strata`
+
+```{r}
+print(s[["meta_strata"]], n = Inf)
+```
+
+
+## Modifying existing BBS maps
+
+Stratify by custom stratification, using sf map object. For example, let's look
+at an east/west divide of southern Canada with BBS CWS strata.
+
+First we'll start with the CWS BBS data
+```{r}
+map <- load_map("bbs_cws")
+```
+
+We'll modify this by first looking only at provinces (omitting the northern territories),
+transforming to the GPS CRS (4326), and ensuring the resulting polygons are valid.
+```{r, fig.cap="", fig.alt= "", fig.width = 8, fig.asp = 0.8}
+new_map <- map %>%
+  filter(country_code == "CA", !prov_state %in% c("NT", "NU", "YT")) %>%
+  st_transform(4326)%>%
+  st_make_valid()
+```
+
+Now we can crop this map to make a western and an eastern portion, defined by
+longitude and latitude (which is why we first transformed to the GPS CRS).
+```{r}
+west <- st_crop(new_map, xmin = -140, ymin = 42, xmax = -95, ymax = 68) %>%
+  mutate(strata_name = "west")
+east <- st_crop(new_map, xmin = -95, ymin = 42, xmax = -52, ymax = 68) %>%
+  mutate(strata_name = "east")
+```
+
+Now we'll bind these together and transform back to the original CRS
+
+```{r, fig.cap="", fig.alt= "", fig.width = 8, fig.asp = 0.8}
+new_strata <- bind_rows(west, east) %>%
+  st_transform(st_crs(map))
+
+ggplot() +
+  geom_sf(data = map) +
+  geom_sf(data = new_strata, aes(fill = strata_name), alpha = 1)
+```
+
+Looks good! Let's use it in our stratification and take a look at the points
+afterwards to ensure they've been categorized appropriately.
+
+```{r, fig.cap="", fig.alt= "", fig.width = 8, fig.asp = 0.8}
+s <- stratify(by = "canada_ew", species = "Canada Jay",
+              strata_custom = new_strata)
+
+s$meta_data
+routes <- s$routes_strata %>%
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+
+ggplot() +
+  geom_sf(data = new_strata, aes(fill = strata_name), alpha = 1) +
+  geom_sf(data = routes, aes(shape = strata_name))
+
+```
+
+
+
