@@ -613,6 +613,33 @@ northern and southern portions of the Barn Swallow's range.
 First we load a [fitted model object for Barn
 Swallow](https://drive.google.com/file/d/1hlJ9rljDSGdkV4P_-k07wBSyWyKOy-hm/view?usp=drive_link).
 
+``` r
+
+
+species <- "Barn Swallow"
+
+# extract the unique numerical identifier for this species in the BBS database
+species_number <- search_species(species) %>%
+  filter(!grepl(pattern = "unid", x = english)) %>% #removing observations not clearly identified as Allen's Hummingbird.
+  select(aou) %>%
+  unlist()
+
+s <- stratify("bbs",
+              species = species) %>%
+  prepare_data(min_n_routes = 3,
+               min_span = 10) 
+
+
+ps <- prepare_spatial(s, strata_map = load_map("bbs"))
+
+p <- prepare_model(ps,
+                model = "first_diff", model_variant = "spatial")
+
+
+
+BARS <- run_model(p,
+                  output_basename = "Barn_Swallow_first_diff_spatial",
+                  output_dir = "output")
 
 
 BARS <- readRDS("output/Barn_Swallow_first_diff_spatial.rds")
