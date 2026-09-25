@@ -1,5 +1,4 @@
 
-setwd("C:/Users/SmithAC/Documents/GitHub/bbsBayes2_workshop")
 
 library(bbsBayes2)
 # latlong example ---------------------------------------------------------
@@ -13,7 +12,7 @@ sp<-prepare_spatial(p,map)
 mp_first_diff <- prepare_model(sp, model = "first_diff",model_variant = "spatial",
                                calculate_log_lik = TRUE)
 m_first_diff <- run_model(mp_first_diff,
-                          iter_sampling = 2000)
+                          iter_sampling = 1000)
 saveRDS(m_first_diff,"output/BASP_latlong_first_diff_spatial.rds")
 
 # gamye

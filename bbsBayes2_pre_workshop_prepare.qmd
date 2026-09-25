@@ -4,150 +4,60 @@ format: pdf
 editor: visual
 ---
 
-## bbsBayes2 -- An updated and improved R package for customized analyses of North American Breeding Bird Survey data
+## **Modeling Breeding Bird Survey with bbsBayes2: status, trends, and causal modeling of drivers of trends**
 
-## Tuesday, 8 August, 8:00--11:00 a.m. ET
-## Salon F
+## Monday, 8 October, 2026, 14:00-16:30 EDT
 
-**Instructors**:
+## 
 
-Adam C. Smith (Canadian Wildlife Service, Environment and Climate Change Canada) 
-[adamcsmith.birdstats@gmail.com](mailto:adamcsmith.birdstats@gmail.com)
-Adam C. Smith on [conference Slack channel](https://aos-scosoc2023.slack.com)
+**Lead**:
 
-Brandon Edwards (Carleton University)
-
-Steffi LaZerte (steffilazerte.ca; Brandon University)
+Adam C. Smith (Canadian Wildlife Service, Environment and Climate Change Canada) [adam.smith\@ec.gc.ca](mailto:adam.smith@ec.gc.ca) Adam C. Smith on
 
 ### About the workshop
 
-[bbsBayes2](https://bbsbayes.github.io/bbsBayes2) is a fully-rebuilt R package (replacing bbsBayes), for fitting the hierarchical Bayesian models used to estimate status and trends from the North American Breeding Bird Survey. This new package provides improved parameter estimation using Stan, spatially explicit models well suited to exploring spatial patterns in trends, a streamlined workflow, the ability to use custom stratifications, and advanced functions to assist with cross-validation and model comparisons. 
+[bbsBayes2](https://bbsbayes.github.io/bbsBayes2) is an R-package that allows for easy access to the North American Breeding Bird Survey data and for fitting a selection of hierarchical Bayesian models that estimate status and trends and can be modified to estimate the influence of spatial and temporal predictors on trends and abundance (e.g., [Mckellar et al. 2025](https://doi.org/10.1675/063.048.0203) and [Smith et al. 2024](https://doi.org/10.1093/ornithapp/duad056)). The package provides efficient, fully-Bayesian parameter estimation using Stan, spatially explicit models well suited to exploring spatial patterns in trends, and options to customize models to include covariates of trends and abundance. The package also allows for a streamlined Bayesian workflow that facilitates convergence diagnostics, prior and posterior predictions, visualization of model predictions, as well as cross-validation and model comparisons.
 
-During this workshop you will follow along with live coding to get a hands-on experience manipulating and visualizing output from a range of models and species. 
-We will demonstrate the package's functions, including those that allow you to:
+During this workshop you will follow along with live coding to get hands-on experience manipulating and visualizing output from a range of models and species. We will demonstrate the package’s functions, including those that allow you to:
 
-1.  Prepare the data for modeling a given species
-
-2.  Estimate trends for any time period (1970-2019, 2005-2015, 1980-2000, etc.) and plot population trajectories
-
-3.  Generate heat maps of population trends
-
-4.  Choose from a suite of built-in hierarchical Bayesian models and access tools to help with cross-validation and model comparison
-
-5.  Estimate trends for customized regions (e.g., all of the eastern Boreal, Great Plains versus eastern populations of grassland birds)
-
-6.  Access and customize the main Stan models to change priors or add covariates (e.g., annual climate metrics or landcover).
+1.  Prepare the data for modeling a given species and fit a model that estimates trends for any time period (1970-2019, 2005-2015, 1980-2000, etc.)
+2.  Generate heat maps of population trends and graph population trajectories.
+3.  Choose from a suite of built-in hierarchical Bayesian models and access tools to help with cross-validation and model comparison.
+4.  Estimate trends for customized regions (e.g., all of the eastern Boreal, Great Plains versus eastern populations of grassland birds).
+5.  Build and fit customized models: the workshop allows some time to explore customizing the base-models with examples of models that estimate regional climate-effects on population trends, local landcover effects on mean abundance, landcover change effects on trends, etc.
 
 ## To do before the workshop
 
-To make our time on Tuesday as efficient as possible, please ensure that you have completed
-to following steps prior to the workshop.
+To make the workshop as efficient as possible, please ensure that you have completed the following steps prior to the workshop.
 
-#### 1. Install software and download BBS data
+#### 1. Fill in the [pre-workshop survey](https://docs.google.com/forms/d/e/1FAIpQLSeEFM_nShyszyTTcwZVge8GviwxBkSJz_muyL6heIhLW2Z_Hg/viewform?usp=publish-editor)
+
+#### 2. Install software and download BBS data
 
 Run the installation steps at the beginning of the [Getting Started Vignette](https://bbsbayes.github.io/bbsBayes2/) including:
 
-1.  Install the latest release of bbsBayes2 (please update if you have already installed it)
+1.  Install the latest release of bbsBayes2 (please update if you have previously installed it)
 
-2.  Install cmdstanr and confirm that your setup is correct.
+2.  [Install cmdstanr](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#install-cmdstanr) and confirm that your setup is correct.
 
-3.  Download the BBS data.
+3.  Download the BBS data `bbsBayes2::fetch_bbs_data()`.
 
-**Contact [Adam](mailto:adamcsmith.birdstats@gmail.com) if you run into problems with these installations** 
+**If you are having problems with these installations, you're welcome to email [me](mailto:adam.smith@ec.gc.ca). I will do my best to help.**
 
 #### 2. Download fitted model files
 
-In addition, please download these zip files (from a Google Drive, links below) that include stored model output and an alternate stratification map that we'll use during the workshop. These additional files will allow us to try out the summary functions (trends, trajectories, trend maps, etc.), without having to run the models yourself (BBS models can require hours or even days to finish sampling). Once downloaded, unzip them to a directory called *`output`* within the working directory where you expect to do your coding during the workshop.
+In addition, please download these zip files (from a Google Drive, links below) that include stored model output and an alternate stratification map that we'll use during the workshop. These additional files will allow us to try out the summary functions (trends, trajectories, trend maps, etc.), without having to run the models yourself (BBS models can require hours or longer to finish sampling). Once downloaded, unzip them to a directory called *`output`* within the working directory where you expect to do your coding during the workshop.
 
-[Fitted models for Scissor-tailed Flycatcher](https://drive.google.com/file/d/1zF8xOIn_ZuORmjNDHAu5YCJjIx4j-MHC/view?usp=drive_link)
+[Fitted models for Baird's Sparrow]()
 
-[Fitted model for Barn Swallow using First Difference spatial model](https://drive.google.com/file/d/1hlJ9rljDSGdkV4P_-k07wBSyWyKOy-hm/view?usp=sharing)
+Fitted model for Purple Martin
 
-[Fitted model for Barn Swallow using GAMYE spatial model](https://drive.google.com/file/d/1RNbM312_isopRN7Lb-jP1-wK4UvRKkHE/view?usp=sharing)
+SPEI moisture data for North America 1960-2025
 
-[Alternate Stratification](https://drive.google.com/file/d/1pWPC2Eh5VBP7RIC173gazdAmtHfx4KdF/view?usp=sharing)
+[Annual landcover for BBS routes in Canada's Prairies]()
+
+Fitted model for Bobolink
 
 ## Workshop plan
 
-We will start by demonstrating some of the [basic workflow](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#workflow-overview) for using the package, largely using examples from the package vignettes.
-
-We will cover the topics in the list above. We will also be sure to leave time to answer questions and to try to demonstrate some of the more advanced aspects of the models and package. We'll be flexible and focus our time on aspects/issues/questions that are of interest to the group.
-
-![Relationships among functions in the bbsBayes2 package](Flow.png){width="7in"}
-
-```{r, warning=FALSE, echo = FALSE, eval=FALSE}
-library(DiagrammeR)
-flow <- grViz("digraph functions {
-
-  # a 'graph' statement
-  graph [overlap = true, fontsize = 15 compound = true, ranksep = 0.5]
-
-  # several 'node' statements
-  node [shape = rectangle, fontname = 'Courier New',
-        fixedsize = false, style=filled, fillcolor=white]
-
-  fetch [label = 'fetch_bbs_data()', fillcolor=lightblue]
-  remove [label = 'remove_cache()', fillcolor=orange]
-  loadbbs [label = 'load_bbs_data()', fillcolor=lightblue]
-
-  search [label = 'search_species()', fillcolor=orange]
-  strat [label = 'stratify()', fillcolor=lightpink]
-  prepdata [label = 'prepare_data()', fillcolor=lightpink]
-  prepspatial [label = 'prepare_spatial()', fillcolor=lightpink]
-  prepmodel [label = 'prepare_model()', fillcolor=darkolivegreen3]
-  loadmap [label = 'load_map()', fillcolor=orange]
-  assign_ps [label = 'assign_prov_state()', fillcolor=orange]
-
-  runmodel [label = 'run_model()', fillcolor=darkolivegreen3]
-  modelfile [label = 'copy_model_file()', fillcolor=darkolivegreen3]
-
-  conv[label = 'save_model_run()\nget_convergence()\nget_model_vars()\nget_summary()', fillcolor=darkolivegreen3]
-
-  genind [label = 'generate_indices()', fillcolor=thistle]
-  gentre [label = 'generate_trends()', fillcolor=thistle]
-  geo [label = 'plot_geofacet()', fillcolor=thistle]
-  plotind [label = 'plot_indices()', fillcolor=thistle]
-  genmap [label = 'plot_map()', fillcolor=thistle]
-
-
-  # several 'edge' statements
-  edge []
-  fetch->remove [style=dashed]
-  fetch->loadbbs [style=dashed]
-  fetch->strat [style=dashed]
-
-  runmodel->remove [style=dashed]
-
-  modelfile->prepmodel [style=dashed]
-
-  search->strat [style=dashed]
-  strat->prepdata
-  prepdata->prepspatial
-  prepdata->prepmodel [color=grey50]
-  prepspatial->prepmodel [color=grey50]
-  prepmodel->runmodel
-
-
-  runmodel->conv
-  runmodel->genind
-  genind->gentre
-
-  loadmap->assign_ps  [style=dashed]
-  loadmap->genind [style=dashed]
-  loadmap->prepspatial [style=dashed]
-  loadmap->strat [style=dashed]
-
-  genind->plotind
-  genind->geo
-  gentre->geo [color=grey50]
-  gentre->genmap
-
-  # Invisible edges for arranging
-  prepspatial->conv [style=invis]
-}")
-```
-
-
-### If you are new to R
-The content of this workshop assumes that everyone is familiar with working R. So if you are new to R, you can expect a rather steep learning curve. But if you're game, then we are too.
-Before you run the package installation steps above. Install both R and RStudio, following the friendly directions [here](https://rstudio-education.github.io/hopr/starting.html).
+We will start by demonstrating some of the [basic workflow](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#workflow-overview) for using the package, largely using examples from the package vignettes. Then I'll demonstrate some ways to modify the base models to include covariates on the species' abundance or changes in abundance.
