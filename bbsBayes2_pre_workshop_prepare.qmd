@@ -1,24 +1,22 @@
 ---
-title: "bbsBayes2 pre-workshop preparation"
+title: "bbsBayes2 SCO-SOC 2026 pre-workshop preparation"
 format: pdf
 editor: visual
 ---
 
-## **Modeling Breeding Bird Survey with bbsBayes2: status, trends, and causal modeling of drivers of trends**
+## Monday, 5 October, 2026, 14:00-16:30 EDT
 
-## Monday, 8 October, 2026, 14:00-16:30 EDT
+### **Modeling Breeding Bird Survey with bbsBayes2: status, trends, and causal modeling of drivers of trends**
 
-## 
+Adam C. Smith (Canadian Wildlife Service, Environment and Climate Change Canada) [adam.smith\@ec.gc.ca](mailto:adam.smith@ec.gc.ca)
 
-**Lead**:
-
-Adam C. Smith (Canadian Wildlife Service, Environment and Climate Change Canada) [adam.smith\@ec.gc.ca](mailto:adam.smith@ec.gc.ca) Adam C. Smith on
-
-### About the workshop
+### bbsBayes2
 
 [bbsBayes2](https://bbsbayes.github.io/bbsBayes2) is an R-package that allows for easy access to the North American Breeding Bird Survey data and for fitting a selection of hierarchical Bayesian models that estimate status and trends and can be modified to estimate the influence of spatial and temporal predictors on trends and abundance (e.g., [Mckellar et al. 2025](https://doi.org/10.1675/063.048.0203) and [Smith et al. 2024](https://doi.org/10.1093/ornithapp/duad056)). The package provides efficient, fully-Bayesian parameter estimation using Stan, spatially explicit models well suited to exploring spatial patterns in trends, and options to customize models to include covariates of trends and abundance. The package also allows for a streamlined Bayesian workflow that facilitates convergence diagnostics, prior and posterior predictions, visualization of model predictions, as well as cross-validation and model comparisons.
 
-During this workshop you will follow along with live coding to get hands-on experience manipulating and visualizing output from a range of models and species. We will demonstrate the package’s functions, including those that allow you to:
+### About the workshop
+
+During this workshop you can follow along with live coding to get hands-on experience manipulating and visualizing output from a range of models and species. We will demonstrate the package’s functions, including those that allow you to:
 
 1.  Prepare the data for modeling a given species and fit a model that estimates trends for any time period (1970-2019, 2005-2015, 1980-2000, etc.)
 2.  Generate heat maps of population trends and graph population trajectories.
@@ -30,7 +28,9 @@ During this workshop you will follow along with live coding to get hands-on expe
 
 To make the workshop as efficient as possible, please ensure that you have completed the following steps prior to the workshop.
 
-#### 1. Fill in the [pre-workshop survey](https://docs.google.com/forms/d/e/1FAIpQLSeEFM_nShyszyTTcwZVge8GviwxBkSJz_muyL6heIhLW2Z_Hg/viewform?usp=publish-editor)
+#### 1. Fill in the pre-workshop survey.
+
+Follow [this link to answer](https://docs.google.com/forms/d/e/1FAIpQLSeEFM_nShyszyTTcwZVge8GviwxBkSJz_muyL6heIhLW2Z_Hg/viewform?usp=publish-editor) a few short questions that will help me customize the workshop.
 
 #### 2. Install software and download BBS data
 
@@ -44,20 +44,16 @@ Run the installation steps at the beginning of the [Getting Started Vignette](ht
 
 **If you are having problems with these installations, you're welcome to email [me](mailto:adam.smith@ec.gc.ca). I will do my best to help.**
 
-#### 2. Download fitted model files
+#### 3. Download extra data (Wait 'til Friday, I'm still updating these files).
 
-In addition, please download these zip files (from a Google Drive, links below) that include stored model output and an alternate stratification map that we'll use during the workshop. These additional files will allow us to try out the summary functions (trends, trajectories, trend maps, etc.), without having to run the models yourself (BBS models can require hours or longer to finish sampling). Once downloaded, unzip them to a directory called *`output`* within the working directory where you expect to do your coding during the workshop.
-
-[Fitted models for Baird's Sparrow]()
-
-Fitted model for Purple Martin
-
-SPEI moisture data for North America 1960-2025
-
-[Annual landcover for BBS routes in Canada's Prairies]()
-
-Fitted model for Bobolink
+In addition, if you would like to be able to follow-along with the online coding demonstration, this [Google Drive folder](https://drive.google.com/drive/folders/1FeV2aRp9BMXWdI1qFc99-t5tQFT0RYcH?usp=sharing) will include some previously fitted models and covariate datasets. Inside the main folder are two subfolders (data and output). If you mimic this folder structure into your working directory for the workshop, you will be able run the custom models and create the custom output locally.
 
 ## Workshop plan
 
-We will start by demonstrating some of the [basic workflow](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#workflow-overview) for using the package, largely using examples from the package vignettes. Then I'll demonstrate some ways to modify the base models to include covariates on the species' abundance or changes in abundance.
+We will start by demonstrating some of the [basic workflow](https://bbsbayes.github.io/bbsBayes2/articles/bbsBayes2.html#workflow-overview) for using the package, largely using examples from the package vignettes. Then I'll demonstrate some ways to modify the base models to include covariates on the species' abundance or changes in abundance. The pre-workshop survey includes an option to suggest specific topics.
+
+See you Monday!
+
+## Français
+
+L'atelier se déroulera en anglais. Je vous invite tous à poser vos questions dans la langue de votre choix.
