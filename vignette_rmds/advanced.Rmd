@@ -618,11 +618,6 @@ Swallow](https://drive.google.com/file/d/1hlJ9rljDSGdkV4P_-k07wBSyWyKOy-hm/view?
 
 species <- "Barn Swallow"
 
-# extract the unique numerical identifier for this species in the BBS database
-species_number <- search_species(species) %>%
-  filter(!grepl(pattern = "unid", x = english)) %>% #removing observations not clearly identified as Allen's Hummingbird.
-  select(aou) %>%
-  unlist()
 
 s <- stratify("bbs",
               species = species) %>%
@@ -639,10 +634,13 @@ p <- prepare_model(ps,
 
 BARS <- run_model(p,
                   output_basename = "Barn_Swallow_first_diff_spatial",
-                  output_dir = "output")
+                  output_dir = "output",
+                  refresh = 500)
 
 
 BARS <- readRDS("output/Barn_Swallow_first_diff_spatial.rds")
+
+
 ```
 
 Then we extract the strata list from the fitted model object and define
@@ -651,10 +649,13 @@ of our new composite regions (*North* or *South*)
 
 ``` r
 
+
 comp_regions <- BARS$meta_strata %>%
-  mutate(north_south = ifelse(bcr < 15, "North","South"))
+  mutate(bcr = as.integer(str_extract(strata_name,"[[:digit:]]{1,2}$")),
+        north_south = ifelse(bcr < 15 | bcr > 68, "North","South"))
 
 i_BARS <- generate_indices(BARS,
+                            hpdi = TRUE,
                            regions_index = comp_regions, # new data frame to identify which strata are in composite regions
                            regions = "north_south") # column in data frame with composite region names
 #> Processing region north_south
